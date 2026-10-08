@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Job Application Tracker</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff, #eef1ff);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            background: linear-gradient(90deg, #6a11cb, #2575fc) !important;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        /* Dashboard */
+
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .total-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .applied-card {
+            background: linear-gradient(135deg, #36d1dc, #5b86e5);
+        }
+
+        .interview-card {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+        }
+
+        .selected-card {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
+
+        .rejected-card {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        }
+
+        /* Application cards */
+
+        .application-card {
+            border: none;
+            border-radius: 18px;
+            transition: 0.3s;
+        }
+
+        .application-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .company-name {
+            color: #4f46e5;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+
+        .btn-add {
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            border-radius: 8px;
+        }
+
+        .btn-delete {
+            border-radius: 8px;
+        }
+
+        /* Search box */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-dark shadow">
+
+    <div class="container">
+
+        <span class="navbar-brand">
+            💼 Job Application Tracker
+        </span>
+
+        <a href="/add/" class="btn btn-light btn-add">
+            ➕ Add Application
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container mt-5">
+
+    <h2 class="fw-bold mb-4">
+        📊 Application Dashboard
+    </h2>
+
+
+    <!-- DASHBOARD -->
+
+    <div class="row mb-5">
+
+        <div class="col-md mb-3">
+
+            <div class="card dashboard-card total-card shadow">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Applications</h6>
+
+                    <h1 class="fw-bold">
+                        {{ total }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md mb-3">
+
+            <div class="card dashboard-card applied-card shadow">
+
+                <div class="card-body text-center">
+
+                    <h6>Applied</h6>
+
+                    <h1 class="fw-bold">
+                        {{ applied }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md mb-3">
+
+            <div class="card dashboard-card interview-card shadow">
+
+                <div class="card-body text-center">
+
+                    <h6>Interview</h6>
+
+                    <h1 class="fw-bold">
+                        {{ interviews }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md mb-3">
+
+            <div class="card dashboard-card selected-card shadow">
+
+                <div class="card-body text-center">
+
+                    <h6>Selected</h6>
+
+                    <h1 class="fw-bold">
+                        {{ selected }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md mb-3">
+
+            <div class="card dashboard-card rejected-card shadow">
+
+                <div class="card-body text-center">
+
+                    <h6>Rejected</h6>
+
+                    <h1 class="fw-bold">
+                        {{ rejected }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box mb-5">
+
+        <form method="GET" class="row g-2">
+
+            <div class="col-md-6">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="🔍 Search company..."
+                    value="{{ search }}">
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <select name="status" class="form-select">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="Applied"
+                        {% if status == "Applied" %}selected{% endif %}>
+                        🔵 Applied
+                    </option>
+
+                    <option value="Interview"
+                        {% if status == "Interview" %}selected{% endif %}>
+                        🟡 Interview
+                    </option>
+
+                    <option value="Selected"
+                        {% if status == "Selected" %}selected{% endif %}>
+                        🟢 Selected
+                    </option>
+
+                    <option value="Rejected"
+                        {% if status == "Rejected" %}selected{% endif %}>
+                        🔴 Rejected
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Search
+                </button>
+
+                <a href="/"
+                   class="btn btn-secondary">
+                    Clear
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- APPLICATIONS -->
+
+    <h3 class="fw-bold mb-4">
+        📋 My Applications
+    </h3>
+
+
+    <div class="row">
+
+        {% for application in applications %}
+
+        <div class="col-md-6 col-lg-4 mb-4">
+
+            <div class="card application-card shadow-sm">
+
+                <div class="card-body">
+
+                    <h4 class="company-name">
+                        {{ application.company_name }}
+                    </h4>
+
+
+                    <p class="mb-2">
+
+                        💼 <strong>Position:</strong>
+
+                        {{ application.job_position }}
+
+                    </p>
+
+
+                    <p class="mb-3">
+
+                        📅 <strong>Applied:</strong>
+
+                        {{ application.applied_date }}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+
+                        {% if application.status == "Selected" %}
+
+                            <span class="badge bg-success">
+                                🟢 Selected
+                            </span>
+
+
+                        {% elif application.status == "Rejected" %}
+
+                            <span class="badge bg-danger">
+                                🔴 Rejected
+                            </span>
+
+
+                        {% elif application.status == "Interview" %}
+
+                            <span class="badge bg-warning text-dark">
+                                🟡 Interview
+                            </span>
+
+
+                        {% else %}
+
+                            <span class="badge bg-primary">
+                                🔵 Applied
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <div class="mt-3">
+
+                        <a
+                            href="/edit/{{ application.id }}/"
+                            class="btn btn-outline-primary btn-sm btn-edit">
+
+                            ✏️ Edit
+
+                        </a>
+
+
+                        <a
+                            href="/delete/{{ application.id }}/"
+                            class="btn btn-outline-danger btn-sm btn-delete">
+
+                            🗑️ Delete
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% empty %}
+
+        <div class="alert alert-info">
+
+            📭 No job applications yet.
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
